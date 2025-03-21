@@ -1,5 +1,8 @@
 const express = require('express');
 const router = express.Router();
+const apiRouter = require('./api');
+
+router.use('/api', apiRouter);
 
 // Test route to check CSRF functionality
 router.get('/hello/world', (req, res) => {
