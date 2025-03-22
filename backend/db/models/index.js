@@ -15,19 +15,21 @@ if (config.use_env_variable) {
   sequelize = new Sequelize(config.database, config.username, config.password, config);
 }
 
+// Read all files in the current directory and import models
 fs
   .readdirSync(__dirname)
   .filter(file => {
     return (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js');
   })
   .forEach(file => {
-    const model = sequelize['import'](path.join(__dirname, file));
-    db[model.name] = model;
+    const model = require(path.join(__dirname, file))(sequelize, Sequelize.DataTypes); // Directly require and initialize the model
+    db[model.name] = model; // Store model in db object
   });
 
+// Set up associations after all models have been imported
 Object.keys(db).forEach(modelName => {
   if (db[modelName].associate) {
-    db[modelName].associate(db);
+    db[modelName].associate(db); // Call associate if it exists
   }
 });
 

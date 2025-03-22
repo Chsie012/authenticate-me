@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const apiRouter = require('./api');
 
+console.log('Setting up routes...');
 router.use('/api', apiRouter);
 
 // Test route to check CSRF functionality
@@ -16,5 +17,6 @@ router.get('/hello/world', (req, res) => {
   // Send a response with a simple message
   res.send('Hello World!');
 });
+
 
 module.exports = router;
