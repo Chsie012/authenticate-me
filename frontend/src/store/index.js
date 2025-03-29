@@ -1,10 +1,11 @@
 // src/store/index.js (updated)
 import { configureStore } from '@reduxjs/toolkit';
-import testReducer from './testSlice';
+import sessionReducer from './session.js';
+import { restoreCSRF, csrfFetch } from './csrf.js';
 
 const store = configureStore({
   reducer: {
-    test: testReducer,
+    session: sessionReducer,
   },
   middleware: (getDefaultMiddleware) => {
     if (process.env.NODE_ENV !== 'production') {
@@ -15,5 +16,12 @@ const store = configureStore({
   },
   devTools: process.env.NODE_ENV !== 'production',
 });
+
+if (process.env.NODE_ENV !== 'production') {
+    restoreCSRF();
+
+    window.csrfFetch = csrfFetch;
+    window.store = store;
+  }
 
 export default store;
