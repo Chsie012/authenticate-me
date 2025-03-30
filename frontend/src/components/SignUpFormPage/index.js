@@ -1,86 +1,100 @@
-import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { signup } from "../../store/session";
-import { Navigate } from "react-router-dom";
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { signup } from '../../store/session'; // Import the signup action
+
+import './SignUpForm.css'; // Import the CSS file
 
 const SignupFormPage = () => {
   const dispatch = useDispatch();
-  const sessionUser = useSelector((state) => state.session.user);
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [errors, setErrors] = useState([]);
+  const navigate = useNavigate();
 
-  // Redirect if user is already logged in
-  if (sessionUser) return <Navigate to="/" />;
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [errors, setErrors] = useState([]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (password !== confirmPassword) {
-      setErrors(["Confirm Password field must match Password."]);
+      setErrors(['Password and Confirm Password must match.']);
       return;
     }
 
-    const newUser = { username, email, password };
-    const response = await dispatch(signup(newUser));
+    const data = await dispatch(signup({ username, email, password }));
 
-    if (response.error) {
-      setErrors([response.error]);
+    if (data.errors) {
+      setErrors(data.errors); // Set errors if signup fails
+    } else {
+      navigate('/'); // Redirect to homepage upon successful signup
     }
   };
 
   return (
-    <div>
-      <h2>Sign Up</h2>
-      <form onSubmit={handleSubmit}>
-        {errors.length > 0 && (
-          <ul>
-            {errors.map((error, index) => (
-              <li key={index} style={{ color: "red" }}>
-                {error}
-              </li>
-            ))}
-          </ul>
-        )}
-        <label>
-          Username:
+    <div className="signup-form-container">
+      <h2 className="signup-form-title">Sign Up</h2>
+      <form onSubmit={handleSubmit} className="signup-form">
+        <div className="form-group">
+          <label htmlFor="username">Username</label>
           <input
             type="text"
+            id="username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             required
+            className="form-input"
           />
-        </label>
-        <label>
-          Email:
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="email">Email</label>
           <input
             type="email"
+            id="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
+            className="form-input"
           />
-        </label>
-        <label>
-          Password:
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="password">Password</label>
           <input
             type="password"
+            id="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
+            className="form-input"
           />
-        </label>
-        <label>
-          Confirm Password:
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="confirmPassword">Confirm Password</label>
           <input
             type="password"
+            id="confirmPassword"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             required
+            className="form-input"
           />
-        </label>
-        <button type="submit">Sign Up</button>
+        </div>
+
+        {errors.length > 0 && (
+          <div className="error-messages">
+            <ul>
+              {errors.map((error, idx) => (
+                <li key={idx} className="error-message">{error}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        <button type="submit" className="signup-button">Sign Up</button>
       </form>
     </div>
   );

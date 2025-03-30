@@ -3,7 +3,8 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import LoginFormPage from './components/LoginFormPage';
 import { restoreSessionUser } from './store/session'; // Import the restore session user thunk
-import SignupFormPage from './components/SignUpFormPage/index';
+import SignupFormPage from './components/SignUpFormPage';
+
 
 function App() {
   const dispatch = useDispatch();
