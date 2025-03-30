@@ -99,20 +99,31 @@ const sessionSlice = createSlice({
   name: "session",
   initialState,
   reducers: {
-    logout: (state) => {
-      state.user = null;
-    },
+    // Remove the local logout action to avoid confusion
+    // We'll use the async thunk logout action instead
   },
   extraReducers: (builder) => {
     builder
       // Handling login action
       .addCase(login.fulfilled, (state, action) => {
         state.user = action.payload;
+        state.error = null;
       })
       .addCase(login.rejected, (state, action) => {
         console.error("Login failed:", action.payload);
         state.error = action.payload;
       })
+
+      // Handling signup action
+      .addCase(signup.fulfilled, (state, action) => {
+        state.user = action.payload;
+        state.error = null;
+      })
+      .addCase(signup.rejected, (state, action) => {
+        console.error("Signup failed:", action.payload);
+        state.error = action.payload;
+      })
+
       // Handling restore session action
       .addCase(restoreSessionUser.pending, (state) => {
         state.status = 'loading';
@@ -120,15 +131,31 @@ const sessionSlice = createSlice({
       .addCase(restoreSessionUser.fulfilled, (state, action) => {
         state.status = 'succeeded';
         state.user = action.payload;
+        state.error = null;
       })
       .addCase(restoreSessionUser.rejected, (state, action) => {
         state.status = 'failed';
         console.error("Failed to restore session:", action.payload);
         state.error = action.payload;
+      })
+
+      // Add the missing cases for logout thunk
+      .addCase(logout.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(logout.fulfilled, (state) => {
+        state.status = 'succeeded';
+        state.user = null;  // Clear the user on successful logout
+        state.error = null;
+      })
+      .addCase(logout.rejected, (state, action) => {
+        state.status = 'failed';
+        console.error("Failed to logout:", action.payload);
+        state.error = action.payload;
       });
   },
 });
 
-// Export actions & reducer
-export const { logout: localLogout } = sessionSlice.actions;
+// Don't export the local logout action since we're now using the thunk
+// export const { logout: localLogout } = sessionSlice.actions;
 export default sessionSlice.reducer;
