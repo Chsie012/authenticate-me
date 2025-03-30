@@ -3,6 +3,7 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import ProfileButton from './ProfileButton';
+import LoginFormModal from '../LoginFormModal';
 import './Navigation.css';
 
 function Navigation() {
@@ -24,9 +25,7 @@ function Navigation() {
         ) : (
           <>
             <li>
-              <NavLink to="/login" className={({isActive}) => isActive ? "active" : ""}>
-                Log In
-              </NavLink>
+              <LoginFormModal />
             </li>
             <li>
               <NavLink to="/signup" className={({isActive}) => isActive ? "active" : ""}>

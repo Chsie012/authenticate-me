@@ -1,35 +1,21 @@
+// frontend/src/components/LoginFormModal/LoginForm.js
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate instead of useHistory
-import * as sessionActions from '../../store/session'; // Assuming session actions are in src/store/session
+import { useDispatch } from 'react-redux';
+import * as sessionActions from '../../store/session';
 import './LoginForm.css';
 
-const LoginFormPage = () => {
+function LoginForm() {
   const dispatch = useDispatch();
-  const navigate = useNavigate(); // Replace useHistory with useNavigate
-
-  // Redux state to check if the user is logged in
-  const user = useSelector(state => state.session.user);
-
-  // Redirect if user is already logged in
-  if (user) {
-    navigate('/'); // Replace history.push('/') with navigate('/')
-  }
-
   const [credential, setCredential] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState([]);
 
-  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     const data = await dispatch(sessionActions.login({ credential, password }));
 
-    if (data.errors) {
-      setErrors(data.errors);  // Set errors if login fails
-    } else {
-      // Redirect to home page upon successful login
-      navigate('/'); // Replace history.push('/') with navigate('/')
+    if (data && data.errors) {
+      setErrors(data.errors);
     }
   };
 
@@ -72,6 +58,6 @@ const LoginFormPage = () => {
       </form>
     </div>
   );
-};
+}
 
-export default LoginFormPage;
+export default LoginForm;
