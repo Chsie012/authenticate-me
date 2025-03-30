@@ -66,6 +66,26 @@ export const restoreSessionUser = createAsyncThunk(
   }
 );
 
+// Thunk to handle user logout
+export const logout = createAsyncThunk(
+  "session/logout",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await csrfFetch("/api/session", {
+        method: "DELETE",
+        credential: "include",
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to log out.");
+      }
+
+      return null; // Return null since we want to clear the user on logout
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
 
 // Initial state
 const initialState = {
@@ -110,5 +130,5 @@ const sessionSlice = createSlice({
 });
 
 // Export actions & reducer
-export const { logout } = sessionSlice.actions;
+export const { logout: localLogout } = sessionSlice.actions;
 export default sessionSlice.reducer;

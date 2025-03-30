@@ -2,8 +2,8 @@ import React, { useEffect } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import LoginFormPage from './components/LoginFormPage';
-import { restoreSessionUser } from './store/session'; // Import the restore session user thunk
-import SignupFormPage from './components/SignUpFormPage';
+import { restoreSessionUser, logout } from './store/session'; // Import the restore session user thunk
+import SignUpFormPage from './components/SignUpFormPage';
 
 
 function App() {
@@ -15,9 +15,21 @@ function App() {
     dispatch(restoreSessionUser());
   }, [dispatch]);
 
+  const handleLogout = () => {
+    dispatch(logout());
+  };
+
   return (
     <div className="App">
       <h1>My Redux App</h1>
+      {sessionUser ? (
+        <div>
+          <p>Welcome, {sessionUser.username}!</p>
+          <button onClick={handleLogout}>Log Out</button>
+        </div>
+      ) : (
+        <p>You are not logged in.</p>
+      )}
       <Routes>
         {/* Redirect to home if the user is logged in, else show login form */}
         <Route
@@ -26,7 +38,7 @@ function App() {
         />
         <Route
           path="/signup"
-          element={sessionUser ? <Navigate to="/" /> : <SignupFormPage />}
+          element={sessionUser ? <Navigate to="/" /> : <SignUpFormPage />}
         />
         {/* If the user is logged in, show a welcome message */}
         <Route
