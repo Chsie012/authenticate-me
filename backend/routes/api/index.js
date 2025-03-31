@@ -6,6 +6,7 @@ router.use('/session', sessionRouter);
 router.use('/users', usersRouter);
 
 router.post('/test', (req, res) => {
+  console.log('Received request body:', req.body); // Log request body
   res.json({ requestBody: req.body });
 });
 

@@ -1,0 +1,11 @@
+{
+  "name": "authenticate-me",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "install": "npm --prefix backend install backend && npm --prefix frontend install frontend",
+    "heroku-postbuild": "npm --prefix frontend run build",
+    "sequelize": "npm --prefix backend run sequelize",
+    "start": "npm --prefix backend start"
+  }
+}

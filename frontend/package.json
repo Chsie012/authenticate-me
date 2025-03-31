@@ -28,11 +28,13 @@
     "css-select": "^5.1.0"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
+  "start": "node server.js",
+  "dev": "nodemon server.js",
+  "sequelize": "sequelize",
+  "sequelize-cli": "sequelize-cli",
+  "migrate": "sequelize db:migrate",
+  "seed": "sequelize db:seed:all"
+},
   "eslintConfig": {
     "extends": [
       "react-app",
